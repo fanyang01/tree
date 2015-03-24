@@ -26,8 +26,16 @@ func TestNew(t *testing.T) {
 		I := Int(i)
 		treap.Insert(I)
 	}
-	var deleted [Count]bool
+
 	for i := 0; i < Count; i++ {
+		I := Int(i)
+		if _, err := treap.Search(I); err != nil {
+			t.Fail()
+		}
+	}
+
+	var deleted [Count]bool
+	for i := 0; i < Count>>1; i++ {
 		I := Int(rand.Intn(Count))
 		if !deleted[int(I)] {
 			_, err := treap.Delete(I)
