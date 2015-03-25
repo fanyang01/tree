@@ -180,6 +180,6 @@ func rightRotate(pr **node) {
 	x := *pr
 	y := x.left
 	x.left = y.right
-	y.right = x.left
+	y.right = x
 	*pr = y
 }
