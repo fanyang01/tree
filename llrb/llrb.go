@@ -107,14 +107,17 @@ func colorFlip(n *node) {
 
 func fixup(pr **node) {
 	r := *pr
+	// left leaning
 	if isRed(r.right) {
 		leftRotate(pr)
 		r = *pr
 	}
+	// successive left leaning
 	if isRed(r.left) && isRed(r.left.left) {
 		rightRotate(pr)
 		r = *pr
 	}
+	// split 4-node into 2-2 nodes
 	if isRed(r.left) && isRed(r.right) {
 		colorFlip(r)
 	}

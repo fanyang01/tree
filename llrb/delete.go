@@ -4,22 +4,28 @@ import "errors"
 
 // Delete remove and return given data from llrb, but return error if data not found
 func (t *Tree) Delete(data Interface) (Interface, error) {
-	if pr := search(&t.root, data); pr == nil {
+	n := deletion(&t.root, data)
+	if n == nil {
 		return nil, errors.New("not found")
 	}
-	ret := deletion(&t.root, data)
 	t.root.color = BLACK
 	t.size--
-	return ret, nil
+	return n.data, nil
 }
 
 // delete conflict with delete in go
-func deletion(pr **node, data Interface) Interface {
-	var ret Interface
+func deletion(pr **node, data Interface) *node {
+	var ret *node
 
 	r := *pr
+	if r == nil {
+		return nil
+	}
 	cmp := data.Compare(r.data)
 	if cmp < 0 {
+		if r.left == nil {
+			return nil
+		}
 		if !isRed(r.left) && !isRed(r.left.left) {
 			moveRedLeft(pr)
 			r = *pr
@@ -33,16 +39,17 @@ func deletion(pr **node, data Interface) Interface {
 		}
 		if cmp == 0 && r.right == nil {
 			*pr = nil
-			return r.data
+			return r
+		} else if r.right == nil {
+			return nil
 		}
-		// something error
 		if !isRed(r.right) && !isRed(r.right.left) {
 			moveRedRight(pr)
 			r = *pr
 			cmp = data.Compare(r.data)
 		}
 		if cmp == 0 {
-			ret = r.data
+			ret = r
 			y := deleteMin(&r.right)
 			y.left, y.right = r.left, r.right
 			y.color = r.color
