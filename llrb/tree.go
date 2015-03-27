@@ -1,3 +1,9 @@
+/*
+Package llrb implement the Left Leaning Red-Black Tree based on following work:
+http://www.cs.princeton.edu/~rs/talks/LLRB/LLRB.pdf
+Note that Robert Sedgewick's paper didn't describe how to perform deletion on Top-down 2-3-4 LLRB, following question on stackoverflow gave the answer:
+http://stackoverflow.com/questions/11336167/what-additional-rotation-is-required-for-deletion-from-a-top-down-2-3-4-left-lea
+*/
 package llrb
 
 import "errors"
