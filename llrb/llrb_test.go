@@ -20,15 +20,15 @@ func (a Int) Compare(b Interface) int {
 }
 
 func TestBU23(t *testing.T) {
-	lt := New(BU23)
+	tr := New(BU23)
 	for i := 0; i < (Count); i++ {
 		I := Int(i)
-		lt.Insert(I)
+		tr.Insert(I)
 	}
 
 	for i := 0; i < Count; i++ {
 		I := Int(i)
-		if _, err := lt.Search(I); err != nil {
+		if _, err := tr.Search(I); err != nil {
 			t.Fail()
 		}
 	}
@@ -37,7 +37,7 @@ func TestBU23(t *testing.T) {
 	for i := 0; i < Count>>1; i++ {
 		I := Int(rand.Intn(Count))
 		if !deleted[int(I)] {
-			_, err := lt.Delete(I)
+			_, err := tr.Delete(I)
 			if err != nil {
 				t.Fail()
 			} else {
@@ -47,15 +47,15 @@ func TestBU23(t *testing.T) {
 	}
 }
 func TestTD234(t *testing.T) {
-	lt := New(TD234)
+	tr := New(TD234)
 	for i := 0; i < (Count); i++ {
 		I := Int(i)
-		lt.Insert(I)
+		tr.Insert(I)
 	}
 
 	for i := 0; i < Count; i++ {
 		I := Int(i)
-		if _, err := lt.Search(I); err != nil {
+		if _, err := tr.Search(I); err != nil {
 			t.Fail()
 		}
 	}
@@ -64,7 +64,7 @@ func TestTD234(t *testing.T) {
 	for i := 0; i < Count>>1; i++ {
 		I := Int(rand.Intn(Count))
 		if !deleted[int(I)] {
-			_, err := lt.Delete(I)
+			_, err := tr.Delete(I)
 			if err != nil {
 				t.Fail()
 			} else {
@@ -75,68 +75,68 @@ func TestTD234(t *testing.T) {
 }
 
 func BenchmarkBU23Insert(b *testing.B) {
-	lt := New(BU23)
+	tr := New(BU23)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		I := Int(i)
-		lt.Insert(I)
+		tr.Insert(I)
 	}
 }
 
 func BenchmarkBU23Search(b *testing.B) {
-	lt := New(BU23)
+	tr := New(BU23)
 	for i := 0; i < b.N; i++ {
 		I := Int(i)
-		lt.Insert(I)
+		tr.Insert(I)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		I := Int(i)
-		lt.Search(I)
+		tr.Search(I)
 	}
 }
 func BenchmarkBU23Delete(b *testing.B) {
-	lt := New(BU23)
+	tr := New(BU23)
 	for i := 0; i < b.N; i++ {
 		I := Int(i)
-		lt.Insert(I)
+		tr.Insert(I)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		I := Int(rand.Intn(Count))
-		lt.Delete(I)
+		tr.Delete(I)
 	}
 }
 
 func BenchmarkTD234Insert(b *testing.B) {
-	lt := New(TD234)
+	tr := New(TD234)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		I := Int(i)
-		lt.Insert(I)
+		tr.Insert(I)
 	}
 }
 func BenchmarkTD234Search(b *testing.B) {
-	lt := New(TD234)
+	tr := New(TD234)
 	for i := 0; i < b.N; i++ {
 		I := Int(i)
-		lt.Insert(I)
+		tr.Insert(I)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		I := Int(i)
-		lt.Search(I)
+		tr.Search(I)
 	}
 }
 func BenchmarkTD234Delete(b *testing.B) {
-	lt := New(TD234)
+	tr := New(TD234)
 	for i := 0; i < b.N; i++ {
 		I := Int(i)
-		lt.Insert(I)
+		tr.Insert(I)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		I := Int(rand.Intn(Count))
-		lt.Delete(I)
+		tr.Delete(I)
 	}
 }
