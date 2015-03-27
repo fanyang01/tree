@@ -8,7 +8,7 @@ This package implements several balance trees:
 - Splay Tree
 - AVL Tree
 
-Following is two benchmark results:
+Following are two benchmark results:
 
 Type/Operations   | Size     | time per operation
 ------------------|----------|-------------------
