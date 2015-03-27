@@ -14,6 +14,8 @@ type Interface interface {
 const (
 	BLACK = false
 	RED   = true
+	TD234 = 0
+	BU23  = 1
 )
 
 type node struct {
@@ -24,22 +26,28 @@ type node struct {
 
 // Tree is left learning red black tree
 type Tree struct {
+	mode int
 	size int
 	root *node
 }
 
 // New return a new-allocated llrb
-func New() *Tree {
+// mode can be TD234 or BU23, otherwise it default to be BU23
+func New(mode int) *Tree {
+	if mode != TD234 && mode != BU23 {
+		mode = BU23
+	}
 	return &Tree{
 		size: 0,
 		root: nil,
+		mode: mode,
 	}
 }
 
 // Insert insert data into correct place
 func (t *Tree) Insert(data Interface) {
 	n := newNode(data)
-	insert(&t.root, n)
+	t.insert(&t.root, n)
 	t.root.color = BLACK
 	t.size++
 }
@@ -77,19 +85,37 @@ func search(pr **node, data Interface) **node {
 
 // pr is the address of pointer to root of subtree
 // n is the new node to be inserted
-func insert(pr **node, n *node) {
+func (t *Tree) insert(pr **node, n *node) {
 	r := *pr
 	if r == nil {
 		*pr = n
 		return
 	}
+	// TD234, split 4-node into 2-2 nodes
+	if t.mode == TD234 && isRed(r.left) && isRed(r.right) {
+		colorFlip(r)
+	}
 	var cmp int
 	if cmp = n.data.Compare(r.data); cmp < 0 {
-		insert(&r.left, n)
+		t.insert(&r.left, n)
 	} else {
-		insert(&r.right, n)
+		t.insert(&r.right, n)
 	}
-	fixup(pr)
+
+	// left leaning
+	if isRed(r.right) {
+		leftRotate(pr)
+		r = *pr
+	}
+	// successive left leaning
+	if isRed(r.left) && isRed(r.left.left) {
+		rightRotate(pr)
+		r = *pr
+	}
+	// BU23, split 4-node into 2-2 nodes
+	if t.mode == BU23 && isRed(r.left) && isRed(r.right) {
+		colorFlip(r)
+	}
 }
 
 func isRed(n *node) bool {
@@ -101,25 +127,11 @@ func isRed(n *node) bool {
 
 func colorFlip(n *node) {
 	n.color = !n.color
-	n.left.color = !n.left.color
-	n.right.color = !n.right.color
-}
-
-func fixup(pr **node) {
-	r := *pr
-	// left leaning
-	if isRed(r.right) {
-		leftRotate(pr)
-		r = *pr
+	if n.left != nil {
+		n.left.color = !n.left.color
 	}
-	// successive left leaning
-	if isRed(r.left) && isRed(r.left.left) {
-		rightRotate(pr)
-		r = *pr
-	}
-	// split 4-node into 2-2 nodes
-	if isRed(r.left) && isRed(r.right) {
-		colorFlip(r)
+	if n.left != nil {
+		n.right.color = !n.right.color
 	}
 }
 
