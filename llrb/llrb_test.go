@@ -1,14 +1,6 @@
-/*
-package llrb implement the Left Leaning Red-Black Tree based on following work:
-http://www.cs.princeton.edu/~rs/talks/LLRB/LLRB.pdf
-Note that Robert Sedgewick's paper didn't describe how to perform deletion on Top-down 2-3-4 LLRB, following question on stackoverflow gave the answer:
-http://stackoverflow.com/questions/11336167/what-additional-rotation-is-required-for-deletion-from-a-top-down-2-3-4-left-lea
-*/
 package llrb
 
 import (
-	"fmt"
-	"log"
 	"math/rand"
 	"testing"
 )
@@ -37,7 +29,6 @@ func TestBU23(t *testing.T) {
 	for i := 0; i < Count; i++ {
 		I := Int(i)
 		if _, err := lt.Search(I); err != nil {
-			fmt.Println(i)
 			t.Fail()
 		}
 	}
@@ -48,7 +39,6 @@ func TestBU23(t *testing.T) {
 		if !deleted[int(I)] {
 			_, err := lt.Delete(I)
 			if err != nil {
-				log.Println(int(I), err.Error())
 				t.Fail()
 			} else {
 				deleted[int(I)] = true
@@ -66,7 +56,6 @@ func TestTD234(t *testing.T) {
 	for i := 0; i < Count; i++ {
 		I := Int(i)
 		if _, err := lt.Search(I); err != nil {
-			fmt.Println(i)
 			t.Fail()
 		}
 	}
@@ -77,11 +66,77 @@ func TestTD234(t *testing.T) {
 		if !deleted[int(I)] {
 			_, err := lt.Delete(I)
 			if err != nil {
-				log.Println(int(I), err.Error())
 				t.Fail()
 			} else {
 				deleted[int(I)] = true
 			}
 		}
+	}
+}
+
+func BenchmarkBU23Insert(b *testing.B) {
+	lt := New(BU23)
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		I := Int(i)
+		lt.Insert(I)
+	}
+}
+
+func BenchmarkBU23Search(b *testing.B) {
+	lt := New(BU23)
+	for i := 0; i < b.N; i++ {
+		I := Int(i)
+		lt.Insert(I)
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		I := Int(i)
+		lt.Search(I)
+	}
+}
+func BenchmarkBU23Delete(b *testing.B) {
+	lt := New(BU23)
+	for i := 0; i < b.N; i++ {
+		I := Int(i)
+		lt.Insert(I)
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		I := Int(rand.Intn(Count))
+		lt.Delete(I)
+	}
+}
+
+func BenchmarkTD234Insert(b *testing.B) {
+	lt := New(TD234)
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		I := Int(i)
+		lt.Insert(I)
+	}
+}
+func BenchmarkTD234Search(b *testing.B) {
+	lt := New(TD234)
+	for i := 0; i < b.N; i++ {
+		I := Int(i)
+		lt.Insert(I)
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		I := Int(i)
+		lt.Search(I)
+	}
+}
+func BenchmarkTD234Delete(b *testing.B) {
+	lt := New(TD234)
+	for i := 0; i < b.N; i++ {
+		I := Int(i)
+		lt.Insert(I)
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		I := Int(rand.Intn(Count))
+		lt.Delete(I)
 	}
 }
