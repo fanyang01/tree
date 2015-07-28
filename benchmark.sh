@@ -4,6 +4,7 @@ for dir in $(ls); do
 	if [[ ! -d $dir ]]; then
 		continue
 	fi
+	[[ "$dir" == "common" ]] && continue
 	cd $dir
 	echo $dir
 	if [[ "$1" != "" ]]; then
