@@ -37,22 +37,22 @@ var (
 
 func compareInt(x, y interface{}) int {
 	a, b := x.(int), y.(int)
-	if a == b {
-		return 0
-	} else if a > b {
+	if a > b {
 		return 1
-	} else {
+	} else if a < b {
 		return -1
+	} else {
+		return 0
 	}
 }
 
 func compareString(x, y interface{}) int {
 	a, b := x.(string), y.(string)
-	if a == b {
-		return 0
-	} else if a > b {
+	if a > b {
 		return 1
-	} else {
+	} else if a < b {
 		return -1
+	} else {
+		return 0
 	}
 }
